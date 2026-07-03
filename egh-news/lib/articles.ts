@@ -7,7 +7,7 @@ export async function getArticles() {
     .order("created_at", { ascending: false });
 
   if (error) {
-    console.error(error);
+    console.error("Get Articles Error:", error);
     return [];
   }
 
@@ -15,19 +15,36 @@ export async function getArticles() {
 }
 
 export async function createArticle(article: {
-  title: string;
+  headline: string;
   summary: string;
   category: string;
-  image: string;
+  image_url: string;
   author: string;
   featured: boolean;
+  published: boolean;
+  content: string;
+  slug: string;
 }) {
   const { data, error } = await supabase
     .from("articles")
     .insert([article]);
 
   if (error) {
-    console.error(error);
+    throw error;
+  }
+
+  return data;
+}
+
+export async function getArticleById(id: number) {
+  const { data, error } = await supabase
+    .from("articles")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.error("Get Article Error:", error);
     return null;
   }
 

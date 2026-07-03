@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { createArticle } from "../../lib/articles";
+import { createSlug } from "../../lib/slug";
 
 export default function Newsroom() {
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
+  const [content, setContent] = useState("");
   const [category, setCategory] = useState("Breaking");
   const [image, setImage] = useState("");
   const [author, setAuthor] = useState("");
@@ -16,25 +18,25 @@ export default function Newsroom() {
       alert("Please complete all required fields.");
       return;
     }
-
+try {
     await createArticle({
-      title,
+      headline: title,
       summary,
+      content,
+      slug: createSlug(title),
       category,
-      image,
+      image_url: image,
       author,
       featured,
+      published: true,
     });
 
     alert("Article published successfully!");
-
-    setTitle("");
-    setSummary("");
-    setCategory("Breaking");
-    setImage("");
-    setAuthor("");
-    setFeatured(false);
+  } catch (err) {
+    console.error(err);
+    alert(JSON.stringify(err, null, 2));
   }
+}
 
   return (
     <main
@@ -61,15 +63,15 @@ export default function Newsroom() {
       />
 
       <textarea
-        placeholder="Article Summary"
-        value={summary}
-        onChange={(e) => setSummary(e.target.value)}
-        rows={6}
-        style={{
-          width: "100%",
-          padding: "12px",
-          marginBottom: "15px",
-        }}
+  placeholder="Full Article Content"
+  value={content}
+  onChange={(e) => setContent(e.target.value)}
+  rows={12}
+  style={{
+    width: "100%",
+    padding: "12px",
+    marginBottom: "15px",
+  }}
       />
 
       <input
