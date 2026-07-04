@@ -1,3 +1,4 @@
+import SearchBar from "./SearchBar";
 export default function Header() {
   const today = new Date().toLocaleDateString("en-GB", {
     weekday: "long",
@@ -10,19 +11,23 @@ export default function Header() {
     <header className="bg-black border-b-4 border-yellow-500">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
         {/* Left Side */}
-        <div>
-          <h1 className="text-4xl font-extrabold text-yellow-400">
-            EGH NEWS
-          </h1>
+       <div>
+  <h1 className="text-4xl font-extrabold text-yellow-400">
+    EGH NEWS
+  </h1>
 
-          <p className="mt-1 text-lg text-white">
-            EverybodyGoHear
-          </p>
+  <p className="mt-1 text-lg text-white">
+    EverybodyGoHear
+  </p>
 
-          <p className="text-sm italic text-gray-400">
-            Hear It First. Know It First.
-          </p>
-        </div>
+  <p className="text-sm italic text-gray-400">
+    Hear It First. Know It First.
+  </p>
+
+  <div className="mt-4">
+    <SearchBar />
+  </div>
+</div>
 
         {/* Right Side */}
         <div className="text-right">

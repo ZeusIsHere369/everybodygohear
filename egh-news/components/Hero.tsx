@@ -1,30 +1,22 @@
 "use client";
 
+import type { Article } from "../types/article";
 import { useEffect, useState } from "react";
-import { getArticles } from "../lib/articles";
+import { getFeaturedArticle } from "../lib/articles";
 
-type Article = {
-  id: number;
-  headline: string;
-  summary: string;
-  category: string;
-  image_url: string;
-  author: string;
-  published: boolean;
-  created_at: string;
-};
+
 
 export default function Hero() {
   const [article, setArticle] = useState<Article | null>(null);
 
   useEffect(() => {
     async function loadHero() {
-      const articles = await getArticles();
+  const data = await getFeaturedArticle();
 
-      if (articles.length > 0) {
-        setArticle(articles[0]);
-      }
-    }
+  if (data) {
+    setArticle(data);
+  }
+}
 
     loadHero();
   }, []);
@@ -74,3 +66,5 @@ export default function Hero() {
     </section>
   );
 }
+
+

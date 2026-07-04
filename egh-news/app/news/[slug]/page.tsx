@@ -2,7 +2,7 @@
 
 import { use } from "react";
 import { useEffect, useState } from "react";
-import { getArticleById } from "../../../lib/articles";
+import { getArticleBySlug } from "../../../lib/articles";
 
 type Article = {
   id: number;
@@ -12,26 +12,27 @@ type Article = {
   image_url: string;
   author: string;
   published: boolean;
+  content: string;
   created_at: string;
 };
 
 export default function ArticlePage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-  const { id } = use(params);
+  const { slug } = use(params);
 
   const [article, setArticle] = useState<Article | null>(null);
 
   useEffect(() => {
     async function loadArticle() {
-      const data = await getArticleById(Number(id));
+      const data = await getArticleBySlug(slug);
       setArticle(data);
     }
 
     loadArticle();
-  }, [id]);
+  }, [slug]);
 
   if (!article) {
     return (
@@ -66,6 +67,14 @@ export default function ArticlePage({
 
       <div className="mt-8 text-lg leading-8 text-gray-700">
         <p>{article.summary}</p>
+       <div className="space-y-6">
+  {article.content
+    .split("\n")
+    .filter(Boolean)
+    .map((paragraph, index) => (
+      <p key={index}>{paragraph}</p>
+    ))}
+</div>
       </div>
     </main>
   );

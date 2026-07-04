@@ -1,6 +1,8 @@
+import Link from "next/link";
 type NewsCardProps = {
   title: string;
   category: string;
+  slug: string;
   summary?: string;
   author?: string;
   image?: string;
@@ -14,9 +16,11 @@ export default function NewsCard({
   author,
   image,
   date,
+  slug,
 }: NewsCardProps) {
   return (
-    <div className="overflow-hidden rounded-xl bg-white shadow transition hover:shadow-lg">
+  <Link href={'/news/${slug}'}>
+    <div className="overflow-hidden rounded-xl bg-white shadow transition hover:shadow-lg cursor-pointer">
 
       {/* Article Image */}
       <div className="h-48 w-full overflow-hidden bg-gray-300">
@@ -59,5 +63,6 @@ export default function NewsCard({
       </div>
 
     </div>
+  </Link>
   );
 }

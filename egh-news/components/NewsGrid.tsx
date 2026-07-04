@@ -1,19 +1,11 @@
 "use client";
 
+import type { Article } from "../types/article";
 import { useEffect, useState } from "react";
 import { getArticles } from "../lib/articles";
 import NewsCard from "./NewsCard";
 
-type Article = {
-  id: number;
-  headline: string;
-  summary: string;
-  category: string;
-  image_url: string;
-  author: string;
-  published: boolean;
-  created_at: string;
-};
+
 
 export default function NewsGrid() {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -46,14 +38,13 @@ export default function NewsGrid() {
         {articles.length > 0 ? (
           articles.map((article) => (
            <NewsCard
-  key={article.id}
-  category={article.category}
-  title={article.headline}
-  summary={article.summary}
-  author={article.author}
-  image={article.image_url}
-  date={new Date(article.created_at).toLocaleDateString()}
-/>
+              key={article.id}
+              category={article.category}
+              title={article.headline}
+              summary={article.summary}
+              author={article.author}
+              image={article.image_url}
+              date={new Date(article.created_at).toLocaleDateString()} slug={""}/>
           ))
         ) : (
           <p className="text-gray-600">
