@@ -116,3 +116,13 @@ export async function getArticlesByCategory(category: string) {
 
   return data;
 }
+export async function deleteArticle(id: number) {
+  const { error } = await supabase
+    .from("articles")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    throw error;
+  }
+}
