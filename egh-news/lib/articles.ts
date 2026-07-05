@@ -41,7 +41,7 @@ export async function getArticleById(id: number) {
     .from("articles")
     .select("*")
     .eq("id", id)
-    .single();
+    .maybeSingle();
 
   if (error) {
     console.error("Get Article Error:", error);
@@ -56,7 +56,7 @@ export async function getFeaturedArticle() {
     .select("*")
     .eq("featured", true)
     .limit(1)
-    .single();
+    .maybeSingle();
 
   if (!error && data) {
     return data;
@@ -69,7 +69,7 @@ export async function getFeaturedArticle() {
     .eq("published", true)
     .order("created_at", { ascending: false })
     .limit(1)
-    .single();
+    .maybeSingle();
 
   return latest;
 }
@@ -78,7 +78,7 @@ export async function getArticleBySlug(slug: string) {
     .from("articles")
     .select("*")
     .eq("slug", slug)
-    .single();
+    .maybeSingle();
 
   if (error) {
     console.error("Get Article By Slug Error:", error);
@@ -145,7 +145,7 @@ export async function updateArticle(
     .update(article)
     .eq("id", id)
     .select()
-    .single();
+    .maybeSingle();
 
   if (error) {
     throw error;
