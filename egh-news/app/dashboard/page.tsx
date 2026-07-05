@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getArticles } from "../../lib/articles";
+import { getArticles, deleteArticle } from "../../lib/articles";
 import type { Article } from "../../types/article";
 
 export default function Dashboard() {
@@ -19,6 +19,23 @@ export default function Dashboard() {
 
     loadArticles();
   }, []);
+  async function handleDelete(id: number) {
+  const confirmed = window.confirm(
+    "Are you sure you want to delete this article?"
+  );
+
+  if (!confirmed) return;
+
+  try {
+    await deleteArticle(id);
+
+    const updated = await getArticles();
+    setArticles(updated);
+  } catch (error) {
+    console.error(error);
+    alert("Failed to delete article.");
+  }
+}
 
   return (
     <main className="mx-auto max-w-7xl px-6 py-10">
@@ -47,6 +64,7 @@ export default function Dashboard() {
               <th className="px-4 py-3 text-left">Category</th>
               <th className="px-4 py-3 text-left">Published</th>
               <th className="px-4 py-3 text-left">Featured</th>
+              <th className="px-4 py-3 text-left">Actions</th>
             </tr>
 
           </thead>
@@ -72,6 +90,14 @@ export default function Dashboard() {
 
                 <td className="px-4 py-3">
                   {article.featured ? "⭐" : "-"}
+                </td>
+                <td className="px-4 py-3">
+                  <button
+                    onClick={() => handleDelete(article.id)}
+                    className="rounded bg-red-600 px-3 py-1 text-white hover:bg-red-700"
+                  >
+                    🗑 Delete
+                  </button>
                 </td>
               </tr>
             ))}
