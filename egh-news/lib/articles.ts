@@ -126,3 +126,30 @@ export async function deleteArticle(id: number) {
     throw error;
   }
 }
+export async function updateArticle(
+  id: number,
+  article: {
+    headline: string;
+    summary: string;
+    content: string;
+    category: string;
+    image_url: string;
+    author: string;
+    featured: boolean;
+    published: boolean;
+    slug: string;
+  }
+) {
+  const { data, error } = await supabase
+    .from("articles")
+    .update(article)
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}
