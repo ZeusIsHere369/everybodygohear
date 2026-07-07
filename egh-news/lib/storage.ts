@@ -2,20 +2,25 @@ import { supabase } from "./supabase";
 
 export async function uploadImage(file: File) {
   const fileExt = file.name.split(".").pop();
+  const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`;
 
-  const fileName = `${Date.now()}.${fileExt}`;
-
-  const { error } = await supabase.storage
+  // Upload the file
+  const { error: uploadError } = await supabase.storage
     .from("news-images")
-    .upload(fileName, file);
+    .upload(fileName, file, {
+      cacheControl: "3600",
+      upsert: false,
+    });
 
-  if (error) {
-    throw error;
+  if (uploadError) {
+    console.error("Upload error:", uploadError);
+    throw uploadError;
   }
 
-  const { data } = supabase.storage
+  // Get public URL
+  const { data: urlData } = supabase.storage
     .from("news-images")
-    .getPublicUrl(__filename);
+    .getPublicUrl(fileName);
 
-  return data.publicUrl;
+  return urlData.publicUrl;
 }
