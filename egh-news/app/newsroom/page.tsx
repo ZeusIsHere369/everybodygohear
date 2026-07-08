@@ -1,5 +1,6 @@
 "use client";
 
+import Editor from "../../components/Editor";
 import { useState } from "react";
 import { createArticle } from "../../lib/articles";
 import { createSlug } from "../../lib/slug";
@@ -100,18 +101,10 @@ export default function Newsroom() {
         }}
       />
 
-      <textarea
-        placeholder="Full Article Content"
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        rows={12}
-        style={{
-          width: "100%",
-          padding: "12px",
-          marginBottom: "15px",
-        }}
-      />
-
+      <Editor
+  content={content}
+  onChange={setContent}
+/>
       <input
         type="file"
         accept="image/*"
