@@ -26,11 +26,15 @@ export default function ArticlePage({
   const [article, setArticle] = useState<Article | null>(null);
 
   useEffect(() => {
-    async function loadArticle() {
-      const data = await getArticleBySlug(slug);
-      setArticle(data);
-    }
+   async function loadArticle() {
+  console.log("Slug:", slug);
 
+  const data = await getArticleBySlug(slug);
+
+  console.log("Article:", data);
+
+  setArticle(data);
+}
     loadArticle();
   }, [slug]);
 
