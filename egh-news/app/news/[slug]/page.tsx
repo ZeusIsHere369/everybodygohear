@@ -67,14 +67,12 @@ export default function ArticlePage({
 
       <div className="mt-8 text-lg leading-8 text-gray-700">
         <p>{article.summary}</p>
-       <div className="space-y-6">
-  {article.content
-    .split("\n")
-    .filter(Boolean)
-    .map((paragraph, index) => (
-      <p key={index}>{paragraph}</p>
-    ))}
-</div>
+   <div
+  className="prose prose-lg max-w-none"
+  dangerouslySetInnerHTML={{
+    __html: article.content,
+  }}
+/>
       </div>
     </main>
   );
