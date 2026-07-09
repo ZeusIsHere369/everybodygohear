@@ -26,58 +26,119 @@ export default function ArticlePage({
   const [article, setArticle] = useState<Article | null>(null);
 
   useEffect(() => {
-   async function loadArticle() {
-  console.log("Slug:", slug);
+    async function loadArticle() {
+      const data = await getArticleBySlug(slug);
+      setArticle(data);
+    }
 
-  const data = await getArticleBySlug(slug);
-
-  console.log("Article:", data);
-
-  setArticle(data);
-}
     loadArticle();
   }, [slug]);
 
   if (!article) {
     return (
-      <main className="mx-auto max-w-4xl p-10">
+      <main className="mx-auto max-w-5xl p-10">
         <h1 className="text-3xl font-bold">Loading article...</h1>
       </main>
     );
   }
 
+  const articleUrl =
+    typeof window !== "undefined" ? window.location.href : "";
+
   return (
-    <main className="mx-auto max-w-4xl px-6 py-10">
-      <span className="rounded bg-red-600 px-3 py-1 text-sm font-bold text-white">
+    <main className="mx-auto max-w-5xl px-6 py-10">
+
+      {/* Category */}
+      <span className="inline-block rounded-full bg-red-600 px-4 py-2 text-sm font-bold uppercase tracking-wide text-white">
         {article.category}
       </span>
 
-      <h1 className="mt-4 text-5xl font-extrabold">
+      {/* Headline */}
+      <h1 className="mt-5 text-5xl font-extrabold leading-tight text-black md:text-6xl">
         {article.headline}
       </h1>
 
-      <p className="mt-3 text-gray-500">
-        By {article.author} •{" "}
-        {new Date(article.created_at).toLocaleDateString()}
+      {/* Summary */}
+      <p className="mt-5 text-2xl text-gray-600">
+        {article.summary}
       </p>
 
+      {/* Author */}
+      <div className="mt-6 flex flex-wrap items-center gap-5 border-b border-gray-300 pb-6 text-gray-500">
+
+        <span className="font-semibold">
+          ✍️ {article.author}
+        </span>
+
+        <span>
+          📅 {new Date(article.created_at).toLocaleDateString()}
+        </span>
+
+        <span>
+          ⏱️ 5 min read
+        </span>
+
+      </div>
+
+      {/* Hero Image */}
       {article.image_url && (
         <img
           src={article.image_url}
           alt={article.headline}
-          className="mt-8 h-[450px] w-full rounded-xl object-cover"
+          className="mt-8 h-[500px] w-full rounded-2xl object-cover shadow-xl"
         />
       )}
 
-      <div className="mt-8 text-lg leading-8 text-gray-700">
-        <p>{article.summary}</p>
-   <div
-  className="prose prose-lg max-w-none"
-  dangerouslySetInnerHTML={{
-    __html: article.content,
-  }}
-/>
+      {/* Share Buttons */}
+      <div className="mt-8 flex flex-wrap gap-3">
+
+        <a
+          href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-lg bg-blue-600 px-5 py-2 font-bold text-white"
+        >
+          Facebook
+        </a>
+
+        <a
+          href={`https://wa.me/?text=${encodeURIComponent(articleUrl)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-lg bg-green-600 px-5 py-2 font-bold text-white"
+        >
+          WhatsApp
+        </a>
+
+        <a
+          href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(articleUrl)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-lg bg-black px-5 py-2 font-bold text-white"
+        >
+          X
+        </a>
+
+        <button
+          onClick={() => {
+            navigator.clipboard.writeText(articleUrl);
+            alert("Article link copied!");
+          }}
+          className="rounded-lg bg-yellow-400 px-5 py-2 font-bold text-black hover:bg-yellow-500"
+        >
+          Copy Link
+        </button>
+
       </div>
+
+      {/* Article Body */}
+      <article
+        className="prose prose-lg mt-10 max-w-none"
+        dangerouslySetInnerHTML={{
+          __html: article.content,
+        }}
+      />
+
     </main>
   );
 }
