@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { getArticles } from "../lib/articles";
 
 type Article = {
   id: number;
   headline: string;
+  slug: string;
   published: boolean;
 };
 
@@ -14,14 +16,18 @@ export default function BreakingTicker() {
 
   useEffect(() => {
     async function loadBreakingNews() {
-      const data = await getArticles();
+      try {
+        const data = await getArticles();
 
-      if (data) {
-        const latest = data
-          .filter((article: Article) => article.published)
-          .slice(0, 5);
+        if (data) {
+          const latest = data
+            .filter((article: Article) => article.published)
+            .slice(0, 10);
 
-        setHeadlines(latest);
+          setHeadlines(latest);
+        }
+      } catch (error) {
+        console.error("Failed to load breaking news:", error);
       }
     }
 
@@ -29,20 +35,59 @@ export default function BreakingTicker() {
   }, []);
 
   return (
-    <section className="bg-red-700 text-white">
-      <div className="mx-auto flex max-w-7xl items-center gap-3 px-6 py-3">
+    <section className="overflow-hidden bg-red-700 text-white">
 
-        <span className="rounded bg-white px-2 py-1 text-sm font-bold text-red-700">
-          BREAKING
-        </span>
+      <div className="mx-auto flex max-w-7xl items-center">
 
-        <div className="text-sm md:text-base">
-          {headlines.length > 0
-            ? headlines.map((article) => article.headline).join("   •   ")
-            : "Loading breaking news..."}
+        <div className="bg-black px-5 py-3 font-extrabold whitespace-nowrap">
+          🔴 BREAKING
+        </div>
+
+        <div className="overflow-hidden flex-1">
+
+          <div
+            className="flex whitespace-nowrap"
+            style={{
+              animation: "ticker 40s linear infinite",
+            }}
+          >
+            {headlines.map((article) => (
+              <Link
+                key={article.id}
+                href={`/news/${article.slug}`}
+                className="mx-8 hover:text-yellow-300"
+              >
+                {article.headline}
+              </Link>
+            ))}
+
+            {headlines.map((article) => (
+              <Link
+                key={`repeat-${article.id}`}
+                 href={`/news/${article.slug}`}
+                className="mx-8 hover:text-yellow-300"
+              >
+                {article.headline}
+              </Link>
+            ))}
+          </div>
+
         </div>
 
       </div>
+
+      <style jsx>{`
+        @keyframes ticker {
+          from {
+            transform: translateX(0%);
+          }
+
+          to {
+            transform: translateX(-50%);
+          }
+        }
+      `}</style>
+
     </section>
   );
 }
