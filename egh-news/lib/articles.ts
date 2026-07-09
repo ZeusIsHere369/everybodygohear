@@ -153,3 +153,22 @@ export async function updateArticle(
 
   return data;
 }
+export async function getRelatedArticles(
+  currentSlug: string,
+  limit = 3
+) {
+  const { data, error } = await supabase
+    .from("articles")
+    .select("*")
+    .eq("published", true)
+    .neq("slug", currentSlug)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    console.error("Related Articles Error:", error);
+    return [];
+  }
+
+  return data;
+}

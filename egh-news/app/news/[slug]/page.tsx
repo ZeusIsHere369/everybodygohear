@@ -3,9 +3,11 @@
 import { use } from "react";
 import { useEffect, useState } from "react";
 import { getArticleBySlug } from "../../../lib/articles";
+import RelatedArticles from "../../../components/RelatedArticle";
 
 type Article = {
   id: number;
+  slug: string;
   headline: string;
   summary: string;
   category: string;
@@ -138,6 +140,7 @@ export default function ArticlePage({
           __html: article.content,
         }}
       />
+      <RelatedArticles currentSlug={article.slug} />
 
     </main>
   );
