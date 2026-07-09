@@ -19,7 +19,7 @@ export default function NewsCard({
   slug,
 }: NewsCardProps) {
   return (
-  <Link href={'/news/${slug}'}>
+  <Link href={`/news/${slug}`}>
     <div className="overflow-hidden rounded-xl bg-white shadow transition hover:shadow-lg cursor-pointer">
 
       {/* Article Image */}

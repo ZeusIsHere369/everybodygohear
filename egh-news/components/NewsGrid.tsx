@@ -44,7 +44,7 @@ export default function NewsGrid() {
               summary={article.summary}
               author={article.author}
               image={article.image_url}
-              date={new Date(article.created_at).toLocaleDateString()} slug={""}/>
+              date={new Date(article.created_at).toLocaleDateString()} slug={article.slug}/>
           ))
         ) : (
           <p className="text-gray-600">
