@@ -3,7 +3,7 @@
 import { use } from "react";
 import { useEffect, useState } from "react";
 import { getArticleBySlug } from "../../../lib/articles";
-import RelatedArticles from "../../../components/RelatedArticle";
+import RelatedArticles from "../../../components/RelatedArticles";
 
 type Article = {
   id: number;

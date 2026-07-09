@@ -44,18 +44,27 @@ export default function RelatedArticles({
       <ul>
         {articles.map((article) => (
           <li key={article.id}>
-            <Link href={`/${article.slug}`}>
-              <a>
-                {article.image_url && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={article.image_url} alt={article.headline} />
-                )}
-                <div>{article.category}</div>
-                <h4>{article.headline}</h4>
-                <p>{article.summary}</p>
-                <small>{article.author}</small>
-              </a>
-            </Link>
+           <Link
+  href={`/news/${article.slug}`}
+  className="block"
+>
+
+  {article.image_url && (
+    <img
+      src={article.image_url}
+      alt={article.headline}
+    />
+ )}
+
+  <div>{article.category}</div>
+
+  <h4>{article.headline}</h4>
+
+  <p>{article.summary}</p>
+
+  <small>{article.author}</small>
+
+</Link>
           </li>
         ))}
       </ul>
