@@ -50,25 +50,15 @@ export default function AdminPage() {
             </label>
 
             <select className="w-full rounded-lg border p-3">
-
               <option>Breaking</option>
-
               <option>Politics</option>
-
               <option>Business</option>
-
               <option>Sports</option>
-
               <option>Entertainment</option>
-
               <option>Markets</option>
-
               <option>Technology</option>
-
               <option>World</option>
-
             </select>
-
           </div>
 
           <div>
@@ -76,22 +66,19 @@ export default function AdminPage() {
               Featured Image
             </label>
 
-            <input
-              type="file"
-              className="w-full rounded-lg border p-3"
-            />
+            <div>
+              <label className="mb-2 block font-semibold">Featured Image URL</label>
+              <input
+                type="text"
+                placeholder="https://example.com/image.jpg"
+                className="w-full rounded-lg border p-3"
+              />
+            </div>
           </div>
 
           <div className="flex gap-4">
-
-            <button className="rounded-lg bg-yellow-400 px-6 py-3 font-bold text-black">
-              Save Draft
-            </button>
-
-            <button className="rounded-lg bg-black px-6 py-3 font-bold text-white">
-              Publish
-            </button>
-
+            <button className="rounded-lg bg-yellow-400 px-6 py-3 font-bold text-black">Save Draft</button>
+            <button className="rounded-lg bg-black px-6 py-3 font-bold text-white">Publish</button>
           </div>
 
         </div>
