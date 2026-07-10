@@ -91,7 +91,9 @@ export async function searchArticles(searchTerm: string) {
   const { data, error } = await supabase
     .from("articles")
     .select("*")
-    .or(`headline.ilike.%${searchTerm}%,summary.ilike.%${searchTerm}%,content.ilike.%${searchTerm}%`)
+    .or(
+      `headline.ilike.%${searchTerm}%,summary.ilike.%${searchTerm}%,content.ilike.%${searchTerm}%`
+    )
     .order("created_at", { ascending: false });
 
   if (error) {
