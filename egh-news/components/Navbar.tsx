@@ -2,7 +2,7 @@ import Link from "next/link";
 export default function Navbar() {
  const links = [
   { name: "Home", href: "/" },
-  { name: "Breaking", href: "/" },
+  { name: "Breaking", href: "/category/Breaking" },
   { name: "Politics", href: "/category/Politics" },
   { name: "Sports", href: "/category/Sports" },
   { name: "Business", href: "/category/Business" },
