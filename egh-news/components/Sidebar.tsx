@@ -45,14 +45,22 @@ export default function Sidebar() {
           <Link
             key={article.id}
             href={`/news/${article.slug}`}
-            className="block border-b pb-4 transition hover:text-red-600"
+            className="block border-b border-gray-200 pb-5"
           >
 
-            <div className="mb-2 text-xs font-bold uppercase text-red-600">
-              #{index + 1} • {article.category}
-            </div>
+            <div className="mb-2 flex items-center gap-2">
 
-            <h3 className="font-bold leading-6">
+  <span className="rounded bg-red-600 px-2 py-1 text-xs font-bold text-white">
+    #{index + 1}
+  </span>
+
+  <span className="text-xs font-bold uppercase text-gray-500">
+    {article.category}
+  </span>
+
+</div>
+
+            <h3 className="text-lg font-bold leading-6 transition hover:text-red-600">
               {article.headline}
             </h3>
 
