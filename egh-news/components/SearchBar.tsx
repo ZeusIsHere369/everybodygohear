@@ -21,20 +21,43 @@ export default function SearchBar() {
       onSubmit={handleSearch}
       className="flex w-full max-w-lg"
     >
+
       <input
         type="text"
         placeholder="Search EGH NEWS..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="w-full rounded-l-lg border border-gray-300 px-4 py-2 text-black outline-none focus:border-yellow-500"
+        className="
+          w-full
+          rounded-l-lg
+          border
+          border-gray-300
+          bg-white
+          px-4
+          py-2
+          text-black
+          placeholder:text-gray-500
+          outline-none
+          focus:border-yellow-500
+          focus:ring-2
+          focus:ring-yellow-400
+        "
       />
 
       <button
         type="submit"
-        className="rounded-r-lg bg-yellow-400 px-5 font-bold text-black hover:bg-yellow-500"
+        className="
+          rounded-r-lg
+          bg-yellow-400
+          px-5
+          font-bold
+          text-black
+          hover:bg-yellow-500
+        "
       >
         🔍
       </button>
+
     </form>
   );
 }
