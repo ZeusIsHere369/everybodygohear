@@ -1,52 +1,40 @@
 "use client";
 
 import { useState } from "react";
-import { searchArticles } from "../lib/articles";
-import Link from "next/link";
-import type { Article } from "../types/article";
+import { useRouter } from "next/navigation";
 
 export default function SearchBar() {
-  const [query, setQuery] = useState("");
-  const [results, setResults] = useState<Article[]>([]);
+  const router = useRouter();
 
-  async function handleSearch(value: string) {
-    setQuery(value);
+  const [search, setSearch] = useState("");
 
-    if (!value.trim()) {
-      setResults([]);
-      return;
-    }
+  function handleSearch(e: React.FormEvent) {
+    e.preventDefault();
 
-    const data = await searchArticles(value);
-    setResults(data);
+    if (!search.trim()) return;
+
+    router.push(`/search?q=${encodeURIComponent(search)}`);
   }
 
   return (
-    <div className="relative w-full max-w-xl">
+    <form
+      onSubmit={handleSearch}
+      className="flex w-full max-w-lg"
+    >
       <input
         type="text"
         placeholder="Search EGH NEWS..."
-        value={query}
-        onChange={(e) => handleSearch(e.target.value)}
-        className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-yellow-500"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="w-full rounded-l-lg border border-gray-300 px-4 py-2 text-black outline-none focus:border-yellow-500"
       />
 
-      {results.length > 0 && (
-        <div className="absolute z-50 mt-2 w-full rounded-lg border bg-white shadow-lg">
-          {results.map((article) => (
-            <Link
-              key={article.id}
-              href={`/news/${article.slug}`}
-              className="block border-b p-4 hover:bg-gray-100"
-            >
-              <p className="font-bold">{article.headline}</p>
-              <p className="text-sm text-gray-600">
-                {article.category}
-              </p>
-            </Link>
-          ))}
-        </div>
-      )}
-    </div>
+      <button
+        type="submit"
+        className="rounded-r-lg bg-yellow-400 px-5 font-bold text-black hover:bg-yellow-500"
+      >
+        🔍
+      </button>
+    </form>
   );
 }
