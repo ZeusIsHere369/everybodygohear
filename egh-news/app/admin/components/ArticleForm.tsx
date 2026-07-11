@@ -1,12 +1,22 @@
 "use client";
 
+import { useCMS } from "../context/CMSContext";
 import { useState } from "react";
 
 export default function ArticleForm() {
-  const [headline, setHeadline] = useState("");
-  const [summary, setSummary] = useState("");
-  const [author, setAuthor] = useState("");
-  const [category, setCategory] = useState("");
+  const {
+    headline,
+    setHeadline,
+
+    summary,
+    setSummary,
+
+    author,
+    setAuthor,
+
+    category,
+    setCategory,
+  } = useCMS();
 
   return (
     <div className="rounded-xl bg-white p-6 shadow">
@@ -22,11 +32,13 @@ export default function ArticleForm() {
             Headline
           </label>
 
-          <input
-            type="text"
-            placeholder="Enter headline..."
-            className="w-full rounded-lg border p-3"
-          />
+         <input
+  type="text"
+  placeholder="Enter headline..."
+  value={headline}
+  onChange={(e) => setHeadline(e.target.value)}
+  className="w-full rounded-lg border p-3"
+/>
         </div>
 
         <div>
@@ -34,11 +46,13 @@ export default function ArticleForm() {
             Summary
           </label>
 
-          <textarea
-            rows={5}
-            placeholder="Write article summary..."
-            className="w-full rounded-lg border p-3"
-          />
+         <textarea
+  rows={5}
+  placeholder="Write article summary..."
+  value={summary}
+  onChange={(e) => setSummary(e.target.value)}
+  className="w-full rounded-lg border p-3"
+/>
         </div>
 
         <div>
@@ -46,18 +60,20 @@ export default function ArticleForm() {
             Category
           </label>
 
-          <select className="w-full rounded-lg border p-3">
-
-            <option>Breaking</option>
-            <option>Politics</option>
-            <option>Business</option>
-            <option>Sports</option>
-            <option>Entertainment</option>
-            <option>Markets</option>
-            <option>Technology</option>
-            <option>World</option>
-
-          </select>
+        <select
+  value={category}
+  onChange={(e) => setCategory(e.target.value)}
+  className="w-full rounded-lg border p-3"
+>
+  <option>Breaking</option>
+  <option>Politics</option>
+  <option>Business</option>
+  <option>Sports</option>
+  <option>Entertainment</option>
+  <option>Markets</option>
+  <option>Technology</option>
+  <option>World</option>
+</select>
 
         </div>
 
@@ -66,11 +82,13 @@ export default function ArticleForm() {
             Author
           </label>
 
-          <input
-            type="text"
-            placeholder="Reporter name..."
-            className="w-full rounded-lg border p-3"
-          />
+         <input
+  type="text"
+  placeholder="Reporter name..."
+  value={author}
+  onChange={(e) => setAuthor(e.target.value)}
+  className="w-full rounded-lg border p-3"
+/>
         </div>
 
         <div>

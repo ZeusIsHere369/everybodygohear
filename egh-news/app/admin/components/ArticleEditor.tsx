@@ -4,8 +4,11 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import Link from "@tiptap/extension-link";
+import { useCMS } from "../context/CMSContext";
 
 export default function ArticleEditor() {
+  const { content, setContent } = useCMS();
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -19,8 +22,10 @@ export default function ArticleEditor() {
       }),
     ],
 
-    content: "",
-
+    content,
+onUpdate({ editor }) {
+  setContent(editor.getHTML());
+},
     editorProps: {
       attributes: {
         class:
