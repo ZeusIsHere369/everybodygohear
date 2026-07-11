@@ -1,6 +1,13 @@
 "use client";
 
+import { useState } from "react";
+
 export default function ArticleForm() {
+  const [headline, setHeadline] = useState("");
+  const [summary, setSummary] = useState("");
+  const [author, setAuthor] = useState("");
+  const [category, setCategory] = useState("");
+
   return (
     <div className="rounded-xl bg-white p-6 shadow">
 

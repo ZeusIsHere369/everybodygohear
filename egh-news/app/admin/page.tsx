@@ -2,10 +2,12 @@ import ArticleForm from "./components/ArticleForm";
 import ArticleEditor from "./components/ArticleEditor";
 import ImagePanel from "./components/ImagePanel";
 import PublishPanel from "./components/PublishPanel";
+import { CMSProvider } from "./context/CMSContext";
 
 export default function AdminPage() {
   return (
-    <main className="min-h-screen bg-gray-100">
+    <CMSProvider>
+      <main className="min-h-screen bg-gray-100">
 
       {/* Header */}
       <header className="bg-black border-b-4 border-yellow-500 px-8 py-6">
@@ -48,5 +50,6 @@ export default function AdminPage() {
       </section>
 
     </main>
+    </CMSProvider>
   );
 }
