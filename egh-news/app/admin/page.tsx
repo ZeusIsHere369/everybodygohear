@@ -1,84 +1,46 @@
+import ArticleForm from "./components/ArticleForm";
+import ArticleEditor from "./components/ArticleEditor";
+import ImagePanel from "./components/ImagePanel";
+import PublishPanel from "./components/PublishPanel";
+
 export default function AdminPage() {
   return (
     <main className="min-h-screen bg-gray-100">
 
-      <header className="bg-black p-6">
-        <h1 className="text-4xl font-bold text-yellow-400">
+      {/* Header */}
+      <header className="bg-black border-b-4 border-yellow-500 px-8 py-6">
+
+        <h1 className="text-4xl font-extrabold text-yellow-400">
           EGH NEWS CMS
         </h1>
 
-        <p className="text-gray-300">
-          EverybodyGoHear Newsroom
+        <p className="mt-2 text-gray-300">
+          EverybodyGoHear Professional Newsroom
         </p>
+
       </header>
 
-      <section className="mx-auto max-w-4xl rounded-xl bg-white p-8 shadow-lg mt-10">
+      {/* Main Layout */}
+      <section className="mx-auto max-w-7xl px-6 py-10">
 
-        <h2 className="mb-6 text-3xl font-bold">
-          Create New Article
-        </h2>
+        <div className="grid gap-8 lg:grid-cols-3">
 
-        <div className="space-y-6">
+          {/* Left Column */}
+          <div className="space-y-8 lg:col-span-2">
 
-          <div>
-            <label className="mb-2 block font-semibold">
-              Headline
-            </label>
+            <ArticleForm />
 
-            <input
-              type="text"
-              placeholder="Enter headline..."
-              className="w-full rounded-lg border p-3"
-            />
+            <ArticleEditor />
+
           </div>
 
-          <div>
-            <label className="mb-2 block font-semibold">
-              Summary
-            </label>
+          {/* Right Column */}
+          <div className="space-y-8">
 
-            <textarea
-              rows={6}
-              placeholder="Write article summary..."
-              className="w-full rounded-lg border p-3"
-            />
-          </div>
+            <ImagePanel />
 
-          <div>
-            <label className="mb-2 block font-semibold">
-              Category
-            </label>
+            <PublishPanel />
 
-            <select className="w-full rounded-lg border p-3">
-              <option>Breaking</option>
-              <option>Politics</option>
-              <option>Business</option>
-              <option>Sports</option>
-              <option>Entertainment</option>
-              <option>Markets</option>
-              <option>Technology</option>
-              <option>World</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="mb-2 block font-semibold">
-              Featured Image
-            </label>
-
-            <div>
-              <label className="mb-2 block font-semibold">Featured Image URL</label>
-              <input
-                type="text"
-                placeholder="https://example.com/image.jpg"
-                className="w-full rounded-lg border p-3"
-              />
-            </div>
-          </div>
-
-          <div className="flex gap-4">
-            <button className="rounded-lg bg-yellow-400 px-6 py-3 font-bold text-black">Save Draft</button>
-            <button className="rounded-lg bg-black px-6 py-3 font-bold text-white">Publish</button>
           </div>
 
         </div>
