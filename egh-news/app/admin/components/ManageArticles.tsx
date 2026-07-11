@@ -2,7 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getArticles } from "../../../lib/articles";
+import {
+  getArticles,
+  deleteArticle,
+} from "../../../lib/articles";
 
 type Article = {
   id: number;
@@ -17,6 +20,30 @@ type Article = {
 
 export default function ManageArticles() {
   const [articles, setArticles] = useState<Article[]>([]);
+
+  async function handleDelete(id: number) {
+  const confirmDelete = window.confirm(
+    "Delete this article permanently?"
+  );
+
+  if (!confirmDelete) return;
+
+  try {
+    await deleteArticle(id);
+
+    const updated = await getArticles();
+
+    if (updated) {
+      setArticles(updated);
+    }
+
+    alert("Article deleted successfully.");
+
+  } catch (error) {
+    console.error(error);
+    alert("Failed to delete article.");
+  }
+}
 
   useEffect(() => {
     async function loadArticles() {
@@ -55,7 +82,9 @@ export default function ManageArticles() {
 
               <th className="p-3 text-left">Date</th>
 
-              <th className="p-3 text-center">View</th>
+              <th className="p-3 text-center">
+  Actions
+</th>
 
             </tr>
 
@@ -104,16 +133,27 @@ export default function ManageArticles() {
                   {new Date(article.created_at).toLocaleDateString()}
                 </td>
 
-                <td className="p-3 text-center">
+               <td className="p-3">
 
-                  <Link
-                    href={`/news/${article.slug}`}
-                    className="rounded bg-blue-600 px-3 py-2 text-sm font-bold text-white hover:bg-blue-700"
-                  >
-                    View
-                  </Link>
+  <div className="flex justify-center gap-2">
 
-                </td>
+    <Link
+      href={`/news/${article.slug}`}
+      className="rounded bg-blue-600 px-3 py-2 text-sm font-bold text-white hover:bg-blue-700"
+    >
+      👁
+    </Link>
+
+    <button
+      onClick={() => handleDelete(article.id)}
+      className="rounded bg-red-600 px-3 py-2 text-sm font-bold text-white hover:bg-red-700"
+    >
+      🗑
+    </button>
+
+  </div>
+
+</td>
 
               </tr>
 
