@@ -12,7 +12,9 @@ export default function PublishPanel() {
     imageUrl,
     content,
     featured,
+    setFeatured,
     published,
+    setPublished,
   } = useCMS();
 
   async function handlePublish() {
@@ -54,10 +56,13 @@ export default function PublishPanel() {
 
       window.location.href = `/news/${slug}`;
 
-    } catch (error) {
-      console.error(error);
-      alert("Failed to publish article.");
-    }
+    } catch (error: any) {
+  console.error("Publish error message:", error?.message);
+  console.error("Publish error details:", error?.details);
+  console.error("Publish error hint:", error?.hint);
+  console.error("Publish error code:", error?.code);
+  alert(`Failed to publish article: ${error?.message || "Unknown error"}`);
+}
   }
 
   return (
@@ -68,12 +73,12 @@ export default function PublishPanel() {
       </h2>
 
       <label className="mb-5 flex items-center gap-3">
-        <input type="checkbox" checked={featured} readOnly />
+        <input type="checkbox" checked={featured} onChange={() => setFeatured(!featured)} />
         Featured Story
       </label>
 
       <label className="mb-8 flex items-center gap-3">
-        <input type="checkbox" checked={published} readOnly />
+        <input type="checkbox" checked={published} onChange={() => setPublished(!published)} />
         Publish Immediately
       </label>
 
