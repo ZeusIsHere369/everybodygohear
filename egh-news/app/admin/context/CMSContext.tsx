@@ -31,6 +31,11 @@ type CMSContextType = {
 
   published: boolean;
   setPublished: (value: boolean) => void;
+  editingId: number | null;
+setEditingId: (value: number | null) => void;
+
+isEditing: boolean;
+setIsEditing: (value: boolean) => void;
 };
 
 const CMSContext = createContext<CMSContextType | null>(null);
@@ -48,6 +53,8 @@ export function CMSProvider({
   const [content, setContent] = useState("");
   const [featured, setFeatured] = useState(false);
   const [published, setPublished] = useState(false);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   return (
     <CMSContext.Provider
@@ -75,6 +82,10 @@ export function CMSProvider({
 
         published,
         setPublished,
+        editingId,
+        setEditingId,
+        isEditing,
+        setIsEditing,
       }}
     >
       {children}

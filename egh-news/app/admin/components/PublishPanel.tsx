@@ -1,22 +1,7 @@
 "use client";
 
+import { createArticle } from "../../../lib/articles";
 import { useCMS } from "../context/CMSContext";
-
-// Inline createArticle to avoid missing module import
-async function createArticle(data: Record<string, any>) {
-  const res = await fetch('/api/articles', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
-
-  if (!res.ok) {
-    const text = await res.text().catch(() => '');
-    throw new Error(`Failed to create article: ${res.status} ${text}`);
-  }
-
-  return res.json();
-}
 
 export default function PublishPanel() {
   const {
@@ -42,7 +27,7 @@ export default function PublishPanel() {
     }
 
     if (!content.trim()) {
-      alert("Please write the article content.");
+      alert("Please write the article.");
       return;
     }
 
@@ -83,22 +68,12 @@ export default function PublishPanel() {
       </h2>
 
       <label className="mb-5 flex items-center gap-3">
-        <input
-          type="checkbox"
-          checked={featured}
-          onChange={() => {}}
-          readOnly
-        />
+        <input type="checkbox" checked={featured} readOnly />
         Featured Story
       </label>
 
       <label className="mb-8 flex items-center gap-3">
-        <input
-          type="checkbox"
-          checked={published}
-          onChange={() => {}}
-          readOnly
-        />
+        <input type="checkbox" checked={published} readOnly />
         Publish Immediately
       </label>
 

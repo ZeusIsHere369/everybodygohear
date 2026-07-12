@@ -2,60 +2,87 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import {
-  getArticles,
-  deleteArticle,
-} from "../../../lib/articles";
+import { getArticles, deleteArticle } from "../../../lib/articles";
+import { useCMS } from "../context/CMSContext";
 
 type Article = {
   id: number;
   headline: string;
+  summary: string;
+  content: string;
   category: string;
+  image_url: string;
   author: string;
   slug: string;
-  published: boolean;
   featured: boolean;
+  published: boolean;
   created_at: string;
 };
 
 export default function ManageArticles() {
   const [articles, setArticles] = useState<Article[]>([]);
 
-  async function handleDelete(id: number) {
-  const confirmDelete = window.confirm(
-    "Delete this article permanently?"
-  );
+  const {
+    setHeadline,
+    setSummary,
+    setAuthor,
+    setCategory,
+    setImageUrl,
+    setContent,
+    setFeatured,
+    setPublished,
+    setEditingId,
+    setIsEditing,
+  } = useCMS();
 
-  if (!confirmDelete) return;
+  async function loadArticles() {
+    const data = await getArticles();
 
-  try {
-    await deleteArticle(id);
-
-    const updated = await getArticles();
-
-    if (updated) {
-      setArticles(updated);
+    if (data) {
+      setArticles(data);
     }
-
-    alert("Article deleted successfully.");
-
-  } catch (error) {
-    console.error(error);
-    alert("Failed to delete article.");
   }
-}
 
   useEffect(() => {
-    async function loadArticles() {
-      const data = await getArticles();
-
-      if (data) {
-        setArticles(data);
-      }
-    }
-
     loadArticles();
   }, []);
+
+  function handleEdit(article: Article) {
+    setHeadline(article.headline);
+    setSummary(article.summary);
+    setAuthor(article.author);
+    setCategory(article.category);
+    setImageUrl(article.image_url);
+    setContent(article.content);
+    setFeatured(article.featured);
+    setPublished(article.published);
+
+    setEditingId(article.id);
+    setIsEditing(true);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
+
+  async function handleDelete(id: number) {
+    const confirmDelete = window.confirm(
+      "Delete this article permanently?"
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      await deleteArticle(id);
+      await loadArticles();
+
+      alert("Article deleted successfully.");
+    } catch (error) {
+      console.error(error);
+      alert("Failed to delete article.");
+    }
+  }
 
   return (
     <div className="mt-10 rounded-xl bg-white p-6 shadow">
@@ -82,9 +109,7 @@ export default function ManageArticles() {
 
               <th className="p-3 text-left">Date</th>
 
-              <th className="p-3 text-center">
-  Actions
-</th>
+              <th className="p-3 text-center">Actions</th>
 
             </tr>
 
@@ -133,27 +158,34 @@ export default function ManageArticles() {
                   {new Date(article.created_at).toLocaleDateString()}
                 </td>
 
-               <td className="p-3">
+                <td className="p-3">
 
-  <div className="flex justify-center gap-2">
+                  <div className="flex justify-center gap-2">
 
-    <Link
-      href={`/news/${article.slug}`}
-      className="rounded bg-blue-600 px-3 py-2 text-sm font-bold text-white hover:bg-blue-700"
-    >
-      👁
-    </Link>
+                    <Link
+                      href={`/news/${article.slug}`}
+                      className="rounded bg-blue-600 px-3 py-2 text-sm font-bold text-white hover:bg-blue-700"
+                    >
+                      👁
+                    </Link>
 
-    <button
-      onClick={() => handleDelete(article.id)}
-      className="rounded bg-red-600 px-3 py-2 text-sm font-bold text-white hover:bg-red-700"
-    >
-      🗑
-    </button>
+                    <button
+                      onClick={() => handleEdit(article)}
+                      className="rounded bg-yellow-400 px-3 py-2 text-sm font-bold text-black hover:bg-yellow-500"
+                    >
+                      ✏️
+                    </button>
 
-  </div>
+                    <button
+                      onClick={() => handleDelete(article.id)}
+                      className="rounded bg-red-600 px-3 py-2 text-sm font-bold text-white hover:bg-red-700"
+                    >
+                      🗑
+                    </button>
 
-</td>
+                  </div>
+
+                </td>
 
               </tr>
 
