@@ -7,6 +7,7 @@ import {
   getGalleryImages,
 } from "../../../lib/articles";
 import RelatedArticles from "../../../components/RelatedArticles";
+import ImageGallery from "../../../components/ImageGallery";
 
 type Article = {
   id: number;
@@ -151,38 +152,36 @@ export default function ArticlePage({
         }}
       />
       {gallery.length > 0 && (
-  <section className="mt-16">
+        <>
+          <ImageGallery images={gallery} />
+          
+          <h2 className="mb-6 mt-10 text-3xl font-bold">
+            📸 Photo Gallery
+          </h2>
 
-    <h2 className="mb-6 text-3xl font-bold">
-      📸 Photo Gallery
-    </h2>
+          <div className="grid gap-6 md:grid-cols-2">
+            {gallery.map((image) => (
+              <div
+                key={image.id}
+                className="overflow-hidden rounded-xl bg-white shadow-lg"
+              >
+                <img
+                  src={image.image_url}
+                  alt={image.caption}
+                  className="h-80 w-full object-cover"
+                />
 
-    <div className="grid gap-6 md:grid-cols-2">
+                {image.caption && (
+                  <p className="p-4 text-gray-600">
+                    {image.caption}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        </>
+      )}
 
-      {gallery.map((image) => (
-        <div
-          key={image.id}
-          className="overflow-hidden rounded-xl bg-white shadow-lg"
-        >
-          <img
-            src={image.image_url}
-            alt={image.caption}
-            className="h-80 w-full object-cover"
-          />
-
-          {image.caption && (
-            <p className="p-4 text-gray-600">
-              {image.caption}
-            </p>
-          )}
-
-        </div>
-      ))}
-
-    </div>
-
-  </section>
-)}
       <RelatedArticles currentSlug={article.slug} />
 
     </main>
