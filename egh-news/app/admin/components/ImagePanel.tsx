@@ -1,6 +1,7 @@
 "use client";
 
 import { useCMS } from "../context/CMSContext";
+import { useState } from "react";
 
 export default function ImagePanel() {
   const {
@@ -9,6 +10,8 @@ export default function ImagePanel() {
     galleryImages,
     setGalleryImages,
   } = useCMS();
+
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   function updateGalleryImage(index: number, value: string) {
     const updated = [...galleryImages];
@@ -25,6 +28,21 @@ export default function ImagePanel() {
     setGalleryImages(updated);
   }
 
+  function nextImage() {
+    if (selectedIndex === null) return;
+
+    setSelectedIndex(
+      (selectedIndex + 1) % galleryImages.length
+    );
+}
+
+function previousImage() {
+    if (selectedIndex === null) return;
+
+    setSelectedIndex(
+      (selectedIndex - 1 + galleryImages.length) % galleryImages.length
+    );
+}
   return (
     <div className="rounded-xl bg-white p-6 shadow">
 

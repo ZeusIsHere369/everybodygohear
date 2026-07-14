@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type GalleryImage = {
   id: number;
@@ -13,12 +13,59 @@ export default function ImageGallery({
 }: {
   images: GalleryImage[];
 }) {
-  const [selectedImage, setSelectedImage] =
-    useState<GalleryImage | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
+  const currentImage =
+    selectedIndex !== null ? images[selectedIndex] : null;
+
+  function openImage(index: number) {
+    setSelectedIndex(index);
+  }
+
+  function closeImage() {
+    setSelectedIndex(null);
+  }
+
+  function nextImage() {
+    if (selectedIndex === null) return;
+
+    setSelectedIndex((selectedIndex + 1) % images.length);
+  }
+
+  function previousImage() {
+    if (selectedIndex === null) return;
+
+    setSelectedIndex(
+      (selectedIndex - 1 + images.length) % images.length
+    );
+  }
+
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (selectedIndex === null) return;
+
+      if (e.key === "Escape") {
+        closeImage();
+      }
+
+      if (e.key === "ArrowRight") {
+        nextImage();
+      }
+
+      if (e.key === "ArrowLeft") {
+        previousImage();
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () =>
+      window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedIndex]);
 
   return (
     <>
-      {/* Gallery Grid */}
+      {/* Gallery */}
       <section className="mt-16">
 
         <h2 className="mb-6 text-3xl font-bold">
@@ -27,12 +74,12 @@ export default function ImageGallery({
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 
-          {images.map((image) => (
+          {images.map((image, index) => (
 
             <button
               key={image.id}
-              onClick={() => setSelectedImage(image)}
-              className="overflow-hidden rounded-xl shadow-lg transition hover:scale-105"
+              onClick={() => openImage(index)}
+              className="overflow-hidden rounded-xl shadow-lg transition duration-300 hover:scale-105"
             >
 
               <img
@@ -50,11 +97,11 @@ export default function ImageGallery({
       </section>
 
       {/* Lightbox */}
-      {selectedImage && (
+      {currentImage && (
 
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-6"
-          onClick={() => setSelectedImage(null)}
+          onClick={closeImage}
         >
 
           <div
@@ -62,26 +109,58 @@ export default function ImageGallery({
             onClick={(e) => e.stopPropagation()}
           >
 
+            {/* Counter */}
+            <div className="mb-4 text-center text-white text-lg font-semibold">
+              {selectedIndex! + 1} / {images.length}
+            </div>
+
+            {/* Image */}
             <img
-              src={selectedImage.image_url}
-              alt={selectedImage.caption || ""}
-              className="max-h-[80vh] rounded-xl"
+              src={currentImage.image_url}
+              alt={currentImage.caption || ""}
+              className="max-h-[75vh] rounded-xl shadow-2xl"
             />
 
-            {selectedImage.caption && (
+            {/* Caption */}
+            {currentImage.caption && (
 
-              <p className="mt-5 text-center text-white text-lg">
-                {selectedImage.caption}
+              <p className="mt-5 text-center text-lg text-white">
+                {currentImage.caption}
               </p>
 
             )}
 
-            <button
-              onClick={() => setSelectedImage(null)}
-              className="mt-6 w-full rounded-lg bg-yellow-400 py-3 font-bold text-black"
-            >
-              Close
-            </button>
+            {/* Navigation */}
+            <div className="mt-8 flex justify-between gap-4">
+
+              <button
+                onClick={previousImage}
+                className="rounded-lg bg-yellow-400 px-6 py-3 font-bold text-black hover:bg-yellow-500"
+              >
+                ⬅ Previous
+              </button>
+
+              <button
+                onClick={closeImage}
+                className="rounded-lg bg-red-600 px-6 py-3 font-bold text-white hover:bg-red-700"
+              >
+                Close
+              </button>
+
+              <button
+                onClick={nextImage}
+                className="rounded-lg bg-yellow-400 px-6 py-3 font-bold text-black hover:bg-yellow-500"
+              >
+                Next ➡
+              </button>
+
+            </div>
+
+            <p className="mt-6 text-center text-sm text-gray-300">
+              Keyboard shortcuts:
+              <br />
+              ← Previous | → Next | Esc Close
+            </p>
 
           </div>
 
