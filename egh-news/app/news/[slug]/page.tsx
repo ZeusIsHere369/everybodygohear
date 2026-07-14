@@ -2,7 +2,10 @@
 
 import { use } from "react";
 import { useEffect, useState } from "react";
-import { getArticleBySlug } from "../../../lib/articles";
+import {
+  getArticleBySlug,
+  getGalleryImages,
+} from "../../../lib/articles";
 import RelatedArticles from "../../../components/RelatedArticles";
 
 type Article = {
@@ -26,13 +29,20 @@ export default function ArticlePage({
   const { slug } = use(params);
 
   const [article, setArticle] = useState<Article | null>(null);
+  const [gallery, setGallery] = useState<any[]>([]);
 
   useEffect(() => {
     async function loadArticle() {
       const data = await getArticleBySlug(slug);
-      setArticle(data);
-    }
 
+  if (data) {
+    setArticle(data);
+
+    const images = await getGalleryImages(data.id);
+
+    setGallery(images);
+  }
+}
     loadArticle();
   }, [slug]);
 
@@ -140,6 +150,39 @@ export default function ArticlePage({
           __html: article.content,
         }}
       />
+      {gallery.length > 0 && (
+  <section className="mt-16">
+
+    <h2 className="mb-6 text-3xl font-bold">
+      📸 Photo Gallery
+    </h2>
+
+    <div className="grid gap-6 md:grid-cols-2">
+
+      {gallery.map((image) => (
+        <div
+          key={image.id}
+          className="overflow-hidden rounded-xl bg-white shadow-lg"
+        >
+          <img
+            src={image.image_url}
+            alt={image.caption}
+            className="h-80 w-full object-cover"
+          />
+
+          {image.caption && (
+            <p className="p-4 text-gray-600">
+              {image.caption}
+            </p>
+          )}
+
+        </div>
+      ))}
+
+    </div>
+
+  </section>
+)}
       <RelatedArticles currentSlug={article.slug} />
 
     </main>

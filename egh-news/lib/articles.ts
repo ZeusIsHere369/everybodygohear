@@ -14,6 +14,46 @@ export async function getArticles() {
   return data;
 }
 
+export async function saveGalleryImages(
+  articleId: number,
+  images: {
+    image_url: string;
+    caption?: string;
+  }[]
+) {
+  if (images.length === 0) return;
+
+  const rows = images.map((image, index) => ({
+    article_id: articleId,
+    image_url: image.image_url,
+    caption: image.caption ?? "",
+    sort_order: index,
+  }));
+
+  const { error } = await supabase
+    .from("article_images")
+    .insert(rows);
+
+  if (error) {
+    throw error;
+  }
+}
+
+export async function getGalleryImages(articleId: number) {
+  const { data, error } = await supabase
+    .from("article_images")
+    .select("*")
+    .eq("article_id", articleId)
+    .order("sort_order");
+
+  if (error) {
+    console.error(error);
+    return [];
+  }
+
+  return data;
+}
+
 export async function createArticle(article: {
   headline: string;
   summary: string;
@@ -26,8 +66,10 @@ export async function createArticle(article: {
   slug: string;
 }) {
   const { data, error } = await supabase
-    .from("articles")
-    .insert([article]);
+  .from("articles")
+  .insert([article])
+  .select()
+  .single();
 
   if (error) {
     throw error;

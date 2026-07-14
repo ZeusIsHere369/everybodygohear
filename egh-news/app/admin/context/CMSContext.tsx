@@ -22,6 +22,8 @@ type CMSContextType = {
 
   imageUrl: string;
   setImageUrl: (value: string) => void;
+  galleryImages: string[];
+setGalleryImages: (value: string[]) => void;
 
   content: string;
   setContent: (value: string) => void;
@@ -50,6 +52,7 @@ export function CMSProvider({
   const [author, setAuthor] = useState("");
   const [category, setCategory] = useState("Breaking");
   const [imageUrl, setImageUrl] = useState("");
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
   const [content, setContent] = useState("");
   const [featured, setFeatured] = useState(false);
   const [published, setPublished] = useState(false);
@@ -73,6 +76,9 @@ export function CMSProvider({
 
         imageUrl,
         setImageUrl,
+
+        galleryImages,
+        setGalleryImages,
 
         content,
         setContent,

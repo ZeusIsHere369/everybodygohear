@@ -1,6 +1,9 @@
 "use client";
 
-import { createArticle } from "../../../lib/articles";
+import {
+  createArticle,
+  saveGalleryImages,
+} from "../../../lib/articles";
 import { useCMS } from "../context/CMSContext";
 
 export default function PublishPanel() {
@@ -15,6 +18,7 @@ export default function PublishPanel() {
     setFeatured,
     published,
     setPublished,
+    galleryImages,
   } = useCMS();
 
   async function handlePublish() {
@@ -40,7 +44,7 @@ export default function PublishPanel() {
       .replace(/\s+/g, "-");
 
     try {
-      await createArticle({
+      const article = await createArticle({
         headline,
         summary,
         category,
@@ -51,6 +55,16 @@ export default function PublishPanel() {
         content,
         slug,
       });
+      if (galleryImages.length > 0) {
+  await saveGalleryImages(
+    article.id,
+    galleryImages
+      .filter((url) => url.trim() !== "")
+      .map((url) => ({
+        image_url: url,
+      }))
+  );
+}
 
       alert("🎉 Article published successfully!");
 
