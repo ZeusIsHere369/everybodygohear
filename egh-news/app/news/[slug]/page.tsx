@@ -16,6 +16,7 @@ type Article = {
   summary: string;
   category: string;
   image_url: string;
+  video_url: string;
   author: string;
   published: boolean;
   content: string;
@@ -57,6 +58,18 @@ export default function ArticlePage({
 
   const articleUrl =
     typeof window !== "undefined" ? window.location.href : "";
+    const getYouTubeEmbedUrl = (url: string) => {
+  if (!url) return "";
+
+  const regExp =
+    /^.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#&?]*).*/;
+
+  const match = url.match(regExp);
+
+  return match && match[1]
+    ? `https://www.youtube.com/embed/${match[1]}`
+    : "";
+};
 
   return (
     <main className="mx-auto max-w-5xl px-6 py-10">
@@ -101,6 +114,29 @@ export default function ArticlePage({
           className="mt-8 h-[500px] w-full rounded-2xl object-cover shadow-xl"
         />
       )}
+      {article.video_url && (
+
+  <section className="mt-10">
+
+    <h2 className="mb-4 text-2xl font-bold">
+      🎥 Watch Video
+    </h2>
+
+    <div className="overflow-hidden rounded-2xl shadow-xl">
+
+      <iframe
+        width="100%"
+        height="500"
+        src={getYouTubeEmbedUrl(article.video_url)}
+        title="YouTube video player"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      />
+
+    </div>
+
+  </section>
+)}
 
       {/* Share Buttons */}
       <div className="mt-8 flex flex-wrap gap-3">
@@ -151,36 +187,9 @@ export default function ArticlePage({
           __html: article.content,
         }}
       />
-      {gallery.length > 0 && (
-        <>
-          <ImageGallery images={gallery} />
-          
-          <h2 className="mb-6 mt-10 text-3xl font-bold">
-            📸 Photo Gallery
-          </h2>
-
-          <div className="grid gap-6 md:grid-cols-2">
-            {gallery.map((image) => (
-              <div
-                key={image.id}
-                className="overflow-hidden rounded-xl bg-white shadow-lg"
-              >
-                <img
-                  src={image.image_url}
-                  alt={image.caption}
-                  className="h-80 w-full object-cover"
-                />
-
-                {image.caption && (
-                  <p className="p-4 text-gray-600">
-                    {image.caption}
-                  </p>
-                )}
-              </div>
-            ))}
-          </div>
-        </>
-      )}
+     {gallery.length > 0 && (
+  <ImageGallery images={gallery} />
+)}
 
       <RelatedArticles currentSlug={article.slug} />
 

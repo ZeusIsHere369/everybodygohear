@@ -22,22 +22,21 @@ type CMSContextType = {
 
   imageUrl: string;
   setImageUrl: (value: string) => void;
-  galleryImages: string[];
-setGalleryImages: (value: string[]) => void;
+
+  videoUrl: string;
+  setVideoUrl: (value: string) => void;
 
   content: string;
   setContent: (value: string) => void;
+
+  galleryImages: string[];
+  setGalleryImages: (value: string[]) => void;
 
   featured: boolean;
   setFeatured: (value: boolean) => void;
 
   published: boolean;
   setPublished: (value: boolean) => void;
-  editingId: number | null;
-setEditingId: (value: number | null) => void;
-
-isEditing: boolean;
-setIsEditing: (value: boolean) => void;
 };
 
 const CMSContext = createContext<CMSContextType | null>(null);
@@ -51,13 +50,18 @@ export function CMSProvider({
   const [summary, setSummary] = useState("");
   const [author, setAuthor] = useState("");
   const [category, setCategory] = useState("Breaking");
+
   const [imageUrl, setImageUrl] = useState("");
-  const [galleryImages, setGalleryImages] = useState<string[]>([]);
+
+  // NEW: Video URL
+  const [videoUrl, setVideoUrl] = useState("");
+
   const [content, setContent] = useState("");
+
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
+
   const [featured, setFeatured] = useState(false);
   const [published, setPublished] = useState(false);
-  const [editingId, setEditingId] = useState<number | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
 
   return (
     <CMSContext.Provider
@@ -77,21 +81,20 @@ export function CMSProvider({
         imageUrl,
         setImageUrl,
 
-        galleryImages,
-        setGalleryImages,
+        videoUrl,
+        setVideoUrl,
 
         content,
         setContent,
+
+        galleryImages,
+        setGalleryImages,
 
         featured,
         setFeatured,
 
         published,
         setPublished,
-        editingId,
-        setEditingId,
-        isEditing,
-        setIsEditing,
       }}
     >
       {children}

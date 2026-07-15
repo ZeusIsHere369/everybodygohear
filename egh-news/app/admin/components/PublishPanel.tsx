@@ -2,24 +2,28 @@
 
 import {
   createArticle,
+  updateArticle,
   saveGalleryImages,
 } from "../../../lib/articles";
 import { useCMS } from "../context/CMSContext";
 
 export default function PublishPanel() {
   const {
+    articleId,
     headline,
     summary,
     author,
     category,
     imageUrl,
+    videoUrl,
     content,
     featured,
     setFeatured,
     published,
     setPublished,
     galleryImages,
-  } = useCMS();
+    resetCMS,
+  } = useCMS() as any;
 
   async function handlePublish() {
     if (!headline.trim()) {
@@ -44,39 +48,57 @@ export default function PublishPanel() {
       .replace(/\s+/g, "-");
 
     try {
-      const article = await createArticle({
+      const articleData = {
         headline,
         summary,
         category,
         image_url: imageUrl,
+        video_url: videoUrl,
         author: author || "EGH NEWS",
         featured,
         published,
         content,
         slug,
-      });
-      if (galleryImages.length > 0) {
-  await saveGalleryImages(
-    article.id,
-    galleryImages
-      .filter((url) => url.trim() !== "")
-      .map((url) => ({
-        image_url: url,
-      }))
-  );
-}
+      };
 
-      alert("🎉 Article published successfully!");
+      // If we already have an articleId, we're editing an existing
+      // article — update that row instead of inserting a new one.
+      const article = articleId
+        ? await updateArticle(articleId, articleData)
+        : await createArticle(articleData);
+
+      if (galleryImages.length > 0) {
+        await saveGalleryImages(
+          article.id,
+          galleryImages
+            .filter((url: string) => url.trim() !== "")
+            .map((url: string) => ({
+              image_url: url,
+            }))
+        );
+      }
+
+      const wasEditing = Boolean(articleId);
+
+      alert(
+        wasEditing
+          ? "✅ Article updated successfully!"
+          : "🎉 Article published successfully!"
+      );
+
+      // Clear the form and articleId so the next save starts fresh
+      // instead of accidentally overwriting this article again.
+      resetCMS();
 
       window.location.href = `/news/${slug}`;
 
     } catch (error: any) {
-  console.error("Publish error message:", error?.message);
-  console.error("Publish error details:", error?.details);
-  console.error("Publish error hint:", error?.hint);
-  console.error("Publish error code:", error?.code);
-  alert(`Failed to publish article: ${error?.message || "Unknown error"}`);
-}
+      console.error("Publish error message:", error?.message);
+      console.error("Publish error details:", error?.details);
+      console.error("Publish error hint:", error?.hint);
+      console.error("Publish error code:", error?.code);
+      alert(`Failed to publish article: ${error?.message || "Unknown error"}`);
+    }
   }
 
   return (
@@ -106,7 +128,7 @@ export default function PublishPanel() {
         onClick={handlePublish}
         className="w-full rounded-lg bg-black py-3 font-bold text-white hover:bg-gray-800"
       >
-        Publish
+        {articleId ? "Update" : "Publish"}
       </button>
 
     </div>

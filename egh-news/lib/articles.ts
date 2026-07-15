@@ -59,6 +59,7 @@ export async function createArticle(article: {
   summary: string;
   category: string;
   image_url: string;
+  video_url: string;
   author: string;
   featured: boolean;
   published: boolean;
@@ -66,10 +67,10 @@ export async function createArticle(article: {
   slug: string;
 }) {
   const { data, error } = await supabase
-  .from("articles")
-  .insert([article])
-  .select()
-  .single();
+    .from("articles")
+    .insert([article])
+    .select()
+    .single();
 
   if (error) {
     throw error;
